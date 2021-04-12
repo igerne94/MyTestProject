@@ -5,7 +5,6 @@ import { HomePage } from './components/HomePage.jsx';
 import { Documentation } from './components/Documentation.jsx';
 import Nav from 'react-bootstrap/Nav'
 
-import { Tabs, Tab, ControlledTabs,  } from 'react-bootstrap';
 
 export const App = class App extends React.Component {
   

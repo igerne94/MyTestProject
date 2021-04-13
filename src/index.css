@@ -56,3 +56,8 @@ h2 {
   margin: 0px;
 }
 
+div.link {
+  text-decoration: underline;
+  color: darkblue;
+  cursor: pointer;
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { CollapsibleComponent, CollapsibleHead, CollapsibleContent } from "react-collapsible-component";
-import { Link } from 'react-router-dom';
 
 export const HTMLRender = class HTMLRender extends React.Component {
 
@@ -11,6 +10,113 @@ export const HTMLRender = class HTMLRender extends React.Component {
         <div>{this.renderJson()}</div>
       </div>
     );
+  }
+
+  renderItem(item) {
+    return (
+      <div>
+  <div><h1>{item.tittel}</h1></div>
+              <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
+  
+              <CollapsibleComponent name={item.id}>
+                {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
+                {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
+  
+                <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
+  
+                <CollapsibleContent>
+                  <table><tbody>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Owner</td><td>{item.eier ? item.eier : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>FirstPublicated</td><td>{item.forstPublisert ? item.forstPublisert : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>intro</td><td>{item.intro ? item.intro : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>grouppeID</td><td>{item.gruppeId ? item.gruppeId : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Code system ICPC-2</td><td>{item.koder && item.koder['ICPC-2'] ? item.koder['ICPC-2'][0] : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Code system ICD-10</td><td>{item.koder && item.koder['ICD-10'] ? item.koder['ICD-10'][0] : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Technical data</td><td>{item.tekniskeData ? '' : 'none'}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
+                    </tr>
+  
+                    {
+                      Array.isArray(item.links) ?
+                        <tr>
+                          <td colSpan="2">{this.renderLinks(item.links)}</td>
+                        </tr>
+                        : null
+                    }
+  
+                  </tbody></table>
+  
+                  <table><tbody>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Attachments</td><td>{item.attachments ? item.attachments : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Document type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
+                    </tr>
+  
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>Last import to HAPI</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
+                    </tr>
+  
+                  </tbody></table>
+                </CollapsibleContent>
+              </CollapsibleComponent>
+
+              <ol>
+                    {this.renderLinksList(item.links)}
+              </ol>
+  
+      </div>
+    );
+  }
+  
+  renderLinksList(links) {
+    if (links != null)
+      return links.map((item, index) =>
+        <li key={index}>
+          <div className="link" onClick={() => this.props.linkCallback(item.href)}>{item.href ? item.href : ''}</div>
+        </li>);
   }
 
   renderJson() {
@@ -30,45 +136,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return json.map((item, index) =>
           <div key={index}>
 
-            <div><h1>{item.tittel}</h1></div>
-            <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
-
-            <CollapsibleComponent name={item.id}>
-              {item.data.rasjonale != null ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
-
-              <CollapsibleContent>
-                <div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div>
-              </CollapsibleContent>
-
-              <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
-              <CollapsibleContent>
-
-                <table><tbody>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>intro</td><td>{item.intro ? item.id : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Owner</td><td>{item.eier ? item.eier : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>FirstPublicated</td><td>{item.forstPublisert ? item.forstPublisert : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>DokumentType</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
-                  </tr>
-
-                </tbody></table>
-
-              </CollapsibleContent>
-            </CollapsibleComponent>
+            {this.renderItem(item)}
 
           </div>);
       } else {
@@ -76,97 +144,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
         let item = json;
 
         return (
-          <div>
-
-            <div><h1>{item.tittel}</h1></div>
-            <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
-
-            <CollapsibleComponent>
-              {item.data.rasjonale != null ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
-              <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent>
-
-              <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
-
-              <CollapsibleContent>
-                <table><tbody>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Owner</td><td>{item.eier ? item.eier : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>FirstPublicated</td><td>{item.forstPublisert ? item.forstPublisert : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>intro</td><td>{item.intro ? item.intro : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>grouppeID</td><td>{item.gruppeId ? item.gruppeId : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Code system ICPC-2</td><td>{item.koder && item.koder['ICPC-2'] ? item.koder['ICPC-2'][0] : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Code system ICD-10</td><td>{item.koder && item.koder['ICD-10'] ? item.koder['ICD-10'][0] : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Technical data</td><td>{item.tekniskeData ? '' : 'none'}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
-                  </tr>
-
-                  {
-                    Array.isArray(item.links) ?
-                      <tr>
-                        <td colSpan="2">{this.renderLinks(item.links)}</td>
-                      </tr>
-                      : null
-                  }
-
-                </tbody></table>
-
-                <table><tbody>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Attachments</td><td>{item.attachments ? item.attachments : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Document type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Last import to HAPI</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
-                  </tr>
-
-                </tbody></table>
-              </CollapsibleContent>
-            </CollapsibleComponent>
-
-          </div>);
+          this.renderItem(item)
+          );
       }
     }
     return '';
@@ -189,7 +168,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </tr>
 
             <tr>
-              <td>Href</td><td><Link>{item.href ? item.href : ''}</Link></td>
+              <td>Href</td><td><div className="link" onClick={() => this.props.linkCallback(item.href)}>{item.href ? item.href : ''}</div></td>
             </tr>
 
             <tr>

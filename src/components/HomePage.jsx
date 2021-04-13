@@ -36,7 +36,8 @@ export const HomePage = class HomePage extends React.Component {
       let setEnviroments = enviroments.find(o => o.id === enviroment);
   
       let url = setEnviroments.url + 'innhold';
-      let key = setEnviroments.key
+      let key = setEnviroments.key;
+
       if (this.state.uglyId) {
         url += '/' + this.state.uglyId;
       } else {
@@ -60,13 +61,11 @@ export const HomePage = class HomePage extends React.Component {
           }
         }
       )
-        .then(response => response.json())
-        .then(data => {
+      .then(response => response.json())
+      .then(data => {
           this.responseHandler(data);
           this.setState({ showSpinner: false });
-        }, () => this.setState({ showSpinner: false }))
-       
-        ;
+      }, () => this.setState({ showSpinner: false }));
     }
   
     responseHandler = (data) => {
@@ -100,7 +99,41 @@ export const HomePage = class HomePage extends React.Component {
         enviroment: event.target.value
       });
     }
+
+    ChangeHandlerLink = (link) => {
+        if (link) {
+        this.setState({
+          links: link.target.value
+        });
+      }
+    }
   
+    linkCallback = (url) => {
+      this.setState({ response: '' });
+  
+      const enviroment = this.state.enviroment;
+      let setEnviroments = enviroments.find(o => o.id === enviroment);
+  
+      let key = setEnviroments.key;
+  
+      this.setState({ url: url });
+      this.setState({ showSpinner: true });
+  
+      fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Ocp-Apim-Subscription-Key': key
+          }
+        }
+      )
+      .then(response => response.json())
+      .then(data => {
+          this.responseHandler(data);
+          this.setState({ showSpinner: false });
+      }, () => this.setState({ showSpinner: false }));
+    }
   
     render() {
       return (
@@ -183,7 +216,7 @@ export const HomePage = class HomePage extends React.Component {
           </form>
   
           <div>
-            <HTMLRender data={this.state.response}/>
+            <HTMLRender data={this.state.response} linkCallback={this.linkCallback}/>
           </div>
           <div><pre> <StructureLinksRender link={this.state.links}/></pre></div>
           <div><pre>{this.state.response}</pre></div>

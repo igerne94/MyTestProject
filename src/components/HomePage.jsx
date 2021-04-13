@@ -4,6 +4,7 @@ import '../index.css';
 import { enviroments } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
 import { Spinner } from 'reactstrap';
+import { StructureLinksRender } from "./StructureLinksRender";
 
 
 export const HomePage = class HomePage extends React.Component {
@@ -19,7 +20,8 @@ export const HomePage = class HomePage extends React.Component {
         url: '',
         response: '',
         records: [],
-        enviroment: 'prod'
+        enviroment: 'prod',
+        links: ''
       };
   
     }
@@ -183,7 +185,7 @@ export const HomePage = class HomePage extends React.Component {
           <div>
             <HTMLRender data={this.state.response}/>
           </div>
-  
+          <div><pre> <StructureLinksRender link={this.state.links}/></pre></div>
           <div><pre>{this.state.response}</pre></div>
           <div><pre><h4>{this.state.url}</h4></pre></div>
           

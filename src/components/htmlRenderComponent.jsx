@@ -1,7 +1,6 @@
 import React from 'react';
 import { CollapsibleComponent, CollapsibleHead, CollapsibleContent } from "react-collapsible-component";
-
-
+import { Link } from 'react-router-dom';
 
 export const HTMLRender = class HTMLRender extends React.Component {
 
@@ -190,7 +189,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </tr>
 
             <tr>
-              <td>Href</td><td>{item.href ? item.href : ''}</td>
+              <td>Href</td><td><Link>{item.href ? item.href : ''}</Link></td>
             </tr>
 
             <tr>
@@ -201,6 +200,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
         </div>);
   }
+
 
 }
 

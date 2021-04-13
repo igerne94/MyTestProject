@@ -122,7 +122,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
   renderJson() {
     if (this.props.data) {
       let json = JSON.parse(this.props.data);
-      if (Array.isArray(json) && window.location.href.indexOf('newpage') > -1) {
+      if (Array.isArray(json) && window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
           <div key={index}>
 
@@ -132,7 +132,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
           </div>
         )
       }
-      else if (Array.isArray(json) && !window.location.href.indexOf('newpage') > -1) {
+      else if (Array.isArray(json) && !window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
           <div key={index}>
 

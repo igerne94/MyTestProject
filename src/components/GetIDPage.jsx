@@ -5,7 +5,7 @@ import { enviroments } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
 import { Spinner } from 'reactstrap';
 
-export const NewPage = class NewPage extends React.Component {
+export const GetIDPage = class GetIDPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -69,13 +69,10 @@ export const NewPage = class NewPage extends React.Component {
   }
   render() {
     return (
-      <div className="newpage">
+      <div className="getidpage">
         <div className="container">
           <h1 className="font-weight-light">Get ID</h1>
-          <p>
-            Get API ID for contenttypes Retningslinjer, Pakkeforløp, Veiledere etc                   </p>
-
-
+          <p>Get API ID for contenttypes Retningslinjer, Pakkeforløp, Veiledere etc</p>
 
           <form onSubmit={this.mySubmitHandler}>
 
@@ -135,4 +132,4 @@ export const NewPage = class NewPage extends React.Component {
 
 }
 
-export default NewPage;
+export default GetIDPage;

@@ -14,7 +14,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
-      <div>
+      <div className="infobit"> 
   <div><h1>{item.tittel}</h1></div>
               <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
   

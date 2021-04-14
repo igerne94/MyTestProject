@@ -15,97 +15,155 @@ export const HTMLRender = class HTMLRender extends React.Component {
   renderItem(item) {
     return (
       <div>
-  <div><h1>{item.tittel}</h1></div>
-              <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
-  
-              <CollapsibleComponent name={item.id}>
-                {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
-                {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
-  
-                <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
-  
-                <CollapsibleContent>
-                  <table><tbody>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Owner</td><td>{item.eier ? item.eier : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>FirstPublicated</td><td>{item.forstPublisert ? item.forstPublisert : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>intro</td><td>{item.intro ? item.intro : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>grouppeID</td><td>{item.gruppeId ? item.gruppeId : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Code system ICPC-2</td><td>{item.koder && item.koder['ICPC-2'] ? item.koder['ICPC-2'][0] : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Code system ICD-10</td><td>{item.koder && item.koder['ICD-10'] ? item.koder['ICD-10'][0] : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Technical data</td><td>{item.tekniskeData ? '' : 'none'}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
-                    </tr>
-  
-                    {
-                      Array.isArray(item.links) ?
-                        <tr>
-                          <td colSpan="2">{this.renderLinks(item.links)}</td>
-                        </tr>
-                        : null
-                    }
-  
-                  </tbody></table>
-  
-                  <table><tbody>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Attachments</td><td>{item.attachments ? item.attachments : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Document type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
-                    </tr>
-  
-                    <tr>
-                      <td style={{ fontWeight: "bold" }}>Last import to HAPI</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
-                    </tr>
-  
-                  </tbody></table>
-                </CollapsibleContent>
-              </CollapsibleComponent>
+          {/* if object */}
 
-              <ol>
-                    {this.renderLinksList(item.links)}
-              </ol>
+          {/* Core attributes */}
+          <div><h1>{item.tittel}</h1></div>
+          <div name={item.id}>{item.intro ? item.intro : ''}</div>
+          <div name={item.id}>{item.forstPublisert ? item.forstPublisert : ''}</div>
+          <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
+          
+          <CollapsibleComponent name={item.id}>
+            {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
+            {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
+
+            {/* Core metadata attributes */}
+            <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
+
+            <CollapsibleContent>
+              <table><tbody>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Eier</td><td>{item.eier ? item.eier : ''}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Sist Oppdatert</td><td>{item.sistOppdatert ? item.sistOppdatert : ''}</td>
+                </tr>
+
+                {
+                  (item.forstPublisert) ?
+                    <tr>
+                      <td>Forst Publisert</td><td>{item.forstPublisert}</td>
+                    </tr>
+                    : null
+                }
+
+                {
+                  (item.gruppeId) ?
+                    <tr>
+                      <td>Gruppe Id</td><td>{item.gruppeId}</td>
+                    </tr>
+                    : null
+                }
+
+               
+                {
+                  item?.koder?.['ICPC-2'] ?
+                    <tr>
+                      <td>ICPC-2</td><td>{item?.koder['ICPC-2']}</td>
+                    </tr>
+                    : ''
+                }
+
+                {
+                  item?.koder?.['ICD-10'] ?
+                    <tr>
+                      <td>ICD-10</td><td>{item?.koder['ICD-10']}</td>
+                    </tr>
+                    : ''
+                }
+
+                {
+                  item?.koder?.['lis-spesialitet'] ?
+                    <tr>
+                      <td>lis-spesialitet</td><td>{item?.koder['lis-spesialitet']}</td>
+                    </tr>
+                    : ''
+                }
+
+                {
+                  item?.koder?.['lis-laeringsmaal'] ?
+                    <tr>
+                      <td>lis-laeringsmaal</td><td>{item?.koder['lis-laeringsmaal']}</td>
+                    </tr>
+                    : ''
+                }
+
+                {
+                  item?.koder?.['SNOMED-CT'] ?
+                    <tr>
+                      <td>SNOMED-CT</td><td>{item?.koder['SNOMED-CT']}</td>
+                    </tr>
+                    : null
+                }
+
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }} colspan="2">Tekniske data</td><td >{item.tekniskeData ? '' : 'none'}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
+                </tr>
+                
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
+                </tr>
+
+                {
+                  Array.isArray(item.links) ?
+                    <tr>
+                      <td colSpan="2">{this.renderLinks(item.links)}</td>
+                    </tr>
+                    : null
+                }
+
+                {
+                  (item.attachments) ?
+                    <tr>
+                      <td>Attachments</td><td>{item.attachments}</td>
+                    </tr>
+                    : null
+                }
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Dokument type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
+                </tr>
+
+              </tbody></table>
+            </CollapsibleContent>
+
+
+            <CollapsibleHead>
+              <h2>Links navigation</h2>
+            </CollapsibleHead>
+            <CollapsibleContent>
+            <ol>
+                  {this.renderLinksList(item.links)}
+            </ol>
+            </CollapsibleContent>
+
+          </CollapsibleComponent>
+
+         
   
       </div>
     );

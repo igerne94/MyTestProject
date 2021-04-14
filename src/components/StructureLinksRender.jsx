@@ -15,7 +15,6 @@ export const StructureLinksRender = class StructureLinksRender extends React.Com
   structureLinksRender() {
    
       return <div>
-        <div>links here</div>
         <div>{this.renderLinks}</div>
 
         </div>

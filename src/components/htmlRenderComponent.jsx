@@ -17,7 +17,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
       <div className="infobit">
           {/* if object */}
 
-          {/* Core attributes */}
           <div><h1>{item.tittel}</h1></div>
           <div name={item.id}>{item.intro ? item.intro : ''}</div>
           <div name={item.id}>{item.forstPublisert ? item.forstPublisert : ''}</div>
@@ -27,129 +26,124 @@ export const HTMLRender = class HTMLRender extends React.Component {
             {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
             {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
 
-            {/* Core metadata attributes */}
-            <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
+            {<CollapsibleHead><h2>Metadata</h2></CollapsibleHead>}
 
-            <CollapsibleContent>
-              <table><tbody>
+            <CollapsibleContent><table><tbody>
+                  <tr>
+                    <td style={{fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : null}</td>
+                  </tr>
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : ''}</td>
-                </tr>
+                  <tr>
+                    <td style={{fontWeight: "bold" }}>Eier</td><td>{item.eier ? item.eier : null}</td>
+                  </tr>
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Eier</td><td>{item.eier ? item.eier : ''}</td>
-                </tr>
+                  <tr>
+                    <td style={{fontWeight: "bold" }}>Sist Oppdatert</td><td>{item.sistOppdatert ? item.sistOppdatert : null}</td>
+                  </tr>
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Sist Oppdatert</td><td>{item.sistOppdatert ? item.sistOppdatert : ''}</td>
-                </tr>
+                  {
+                    item.forstPublisert ?
+                      (<tr>
+                        <td>Forst Publisert</td><td>{item.forstPublisert}</td>
+                      </tr>)
+                      : null
+                  }
 
-                {
-                  (item.forstPublisert) ?
-                    <tr>
-                      <td>Forst Publisert</td><td>{item.forstPublisert}</td>
-                    </tr>
-                    : null
-                }
+                  {
+                    (item.gruppeId) ?
+                      <tr>
+                        <td>Gruppe Id</td><td>{item.gruppeId}</td>
+                      </tr>
+                      : null
+                  }
 
-                {
-                  (item.gruppeId) ?
-                    <tr>
-                      <td>Gruppe Id</td><td>{item.gruppeId}</td>
-                    </tr>
-                    : null
-                }
-
-               
-                {
-                  item?.koder?.['ICPC-2'] ?
-                    <tr>
-                      <td>ICPC-2</td><td>{item?.koder['ICPC-2']}</td>
-                    </tr>
-                    : ''
-                }
-
-                {
-                  item?.koder?.['ICD-10'] ?
-                    <tr>
-                      <td>ICD-10</td><td>{item?.koder['ICD-10']}</td>
-                    </tr>
-                    : ''
-                }
-
-                {
-                  item?.koder?.['lis-spesialitet'] ?
-                    <tr>
-                      <td>lis-spesialitet</td><td>{item?.koder['lis-spesialitet']}</td>
-                    </tr>
-                    : ''
-                }
-
-                {
-                  item?.koder?.['lis-laeringsmaal'] ?
-                    <tr>
-                      <td>lis-laeringsmaal</td><td>{item?.koder['lis-laeringsmaal']}</td>
-                    </tr>
-                    : ''
-                }
-
-                {
-                  item?.koder?.['SNOMED-CT'] ?
-                    <tr>
-                      <td>SNOMED-CT</td><td>{item?.koder['SNOMED-CT']}</td>
-                    </tr>
-                    : null
-                }
-
-
-                <tr>
-                  <td style={{ fontWeight: "bold" }} colspan="2">Tekniske data</td><td >{item.tekniskeData ? '' : 'none'}</td>
-                </tr>
-
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
-                </tr>
-
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
-                </tr>
                 
+                  {
+                    item?.koder?.['ICPC-2'] ?
+                      (<tr>
+                        <td>ICPC-2</td><td>{item?.koder['ICPC-2']}</td>
+                      </tr>)
+                      : null
+                  }
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
-                </tr>
+                  {
+                    item?.koder?.['ICD-10'] ?
+                      (<tr>
+                        <td>ICD-10</td><td>{item?.koder['ICD-10']}</td>
+                      </tr>)
+                      : null
+                  }
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
-                </tr>
+                  {
+                    item?.koder?.['lis-spesialitet'] ?
+                      (<tr>
+                        <td>lis-spesialitet</td><td>{item?.koder['lis-spesialitet']}</td>
+                      </tr>)
+                      : null
+                  }
 
-                {
-                  Array.isArray(item.links) ?
-                    <tr>
-                      <td colSpan="2">{this.renderLinks(item.links)}</td>
-                    </tr>
-                    : null
-                }
+                  {
+                    item?.koder?.['lis-laeringsmaal'] ?
+                      (<tr>
+                        <td>lis-laeringsmaal</td><td>{item?.koder['lis-laeringsmaal']}</td>
+                      </tr>)
+                      : null
+                  }
 
-                {
-                  (item.attachments) ?
-                    <tr>
-                      <td>Attachments</td><td>{item.attachments}</td>
-                    </tr>
-                    : null
-                }
+                  {
+                    item?.koder?.['SNOMED-CT'] ?
+                      (<tr>
+                        <td>SNOMED-CT</td><td>{item?.koder['SNOMED-CT']}</td>
+                      </tr>)
+                      : null
+                  }
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Dokument type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
-                </tr>
 
-                <tr>
-                  <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
-                </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }} colSpan="2">Tekniske data</td><td >{item.tekniskeData ? '' : 'none'}</td>
+                  </tr>
 
-              </tbody></table>
-            </CollapsibleContent>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Info Id</td><td>{(item.tekniskeData && item.tekniskeData.infoId) ? item.tekniskeData.infoId : ''}</td>
+                  </tr>
+
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
+                  </tr>
+                  
+
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
+                  </tr>
+
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
+                  </tr>
+
+                  {
+                    Array.isArray(item.links) ?
+                      <tr>
+                        <td colSpan="2">{this.renderLinks(item.links)}</td>
+                      </tr>
+                      : null
+                  }
+
+                  {
+                    item.attachments ?
+                      (<tr>
+                        <td>Attachments</td><td>{item.attachments}</td>
+                      </tr>)
+                      : null
+                  }
+
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Dokument type</td><td>{item.dokumentType ? item.dokumentType : ''}</td>
+                  </tr>
+
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
+                  </tr>
+              </tbody></table></CollapsibleContent>
 
 
             <CollapsibleHead>
@@ -186,21 +180,20 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
             <div>{item.kortTittel}</div>
             <div>{item.id}</div>
-            <p> </p>
+            <p> this string will never be written</p>
           </div>
         )
       }
       else if (Array.isArray(json) && !window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
           <div key={index}>
-
-            {this.renderItem(item)}
-
+            <div>
+              {this.renderItem(item)}
+            </div>
           </div>);
       } else {
         //if object (checking)
         let item = json;
-
         return (
           this.renderItem(item)
           );

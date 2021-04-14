@@ -14,7 +14,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
-      <div>
+      <div className="infobit">
           {/* if object */}
 
           {/* Core attributes */}

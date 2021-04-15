@@ -4,7 +4,7 @@ import '../index.css';
 import { enviroments } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
 import { Spinner } from 'reactstrap';
-import { StructureLinksRender } from "./StructureLinksRender";
+//import { StructureLinksRender } from "./StructureLinksRender";
 
 
 export const HomePage = class HomePage extends React.Component {
@@ -64,18 +64,72 @@ export const HomePage = class HomePage extends React.Component {
       .then(response => response.json())
       .then(data => {
           this.responseHandler(data);
-          this.setState({ showSpinner: false });
       }, () => this.setState({ showSpinner: false }));
     }
   
     responseHandler = (data) => {
       if (data) {
-        this.setState({
-          response: JSON.stringify(data, null, 2)
+        // Get links data
+        let promises = [];
+
+        if (Array.isArray(data)) {
+          data.forEach(el => {
+            if(Array.isArray(el.links)) {
+              el.links.forEach(link => {
+                if(link.rel === 'barn' || link.rel === 'forelder') {
+                  promises.push(this.getLinkData(link));
+                }
+              });
+            }
+          });
+        } else {
+          if(Array.isArray(data.links)) {
+            data.links.forEach(link => {
+              if(link.rel === 'barn' || link.rel === 'forelder') {
+                promises.push(this.getLinkData(link));
+              }
+            });
+          }
+        }
+
+        // Set state only when all the data is fetched
+        Promise.all(promises).then(() => {
+          this.setState({
+            response: JSON.stringify(data, null, 2),
+            showSpinner: false
+          });
         });
       } 
     }
   
+    getLinkData = (link) => {
+      let promise = this.linkPromise(link.href);
+      promise.then(data => {
+        link.$title = data.kortTittel;
+      });
+      return promise;
+    }
+
+    linkPromise = (url) => {
+  
+      const enviroment = this.state.enviroment;
+      let setEnviroments = enviroments.find(o => o.id === enviroment);
+  
+      let key = setEnviroments.key;
+  
+      let promise = fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Ocp-Apim-Subscription-Key': key
+          }
+        }
+      )
+      .then(response => response.json());
+      return promise;
+    }
+
     myChangeHandler = (event) => {
       this.setState({
         uglyId: event.target.value
@@ -131,10 +185,9 @@ export const HomePage = class HomePage extends React.Component {
       .then(response => response.json())
       .then(data => {
           this.responseHandler(data);
-          this.setState({ showSpinner: false });
       }, () => this.setState({ showSpinner: false }));
     }
-  
+
     render() {
       return (
         <div>
@@ -218,7 +271,7 @@ export const HomePage = class HomePage extends React.Component {
           <div>
             <HTMLRender data={this.state.response} linkCallback={this.linkCallback}/>
           </div>
-          <div><pre> <StructureLinksRender link={this.state.links}/></pre></div>
+          {/*<div><pre> <StructureLinksRender link={this.state.links}/></pre></div>*/}
           <div><pre>{this.state.response}</pre></div>
           <div><pre><h4>{this.state.url}</h4></pre></div>
           

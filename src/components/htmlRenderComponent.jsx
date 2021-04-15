@@ -3,7 +3,6 @@ import { CollapsibleComponent, CollapsibleHead, CollapsibleContent } from "react
 
 export const HTMLRender = class HTMLRender extends React.Component {
 
-
   render() {
     return (
       <div>
@@ -14,12 +13,12 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
+   
       <div className="infobit">
-          {/* if object */}
-
           <div><h1>{item.tittel}</h1></div>
+          <div name={item.kortTittel}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
           <div name={item.id}>{item.intro ? item.intro : ''}</div>
-          <div name={item.id}>{item.forstPublisert ? item.forstPublisert : ''}</div>
+          <div name={item.id}>{item.forstPublisert ? item.forstPublisert.substring(0,11) : ''}</div>
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
           
           <CollapsibleComponent name={item.id}>
@@ -112,13 +111,31 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   </tr>
                   
 
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Subtype</td><td>{(item.tekniskeData && item.tekniskeData.subType) ? item.tekniskeData.subType : ''}</td>
-                  </tr>
+               
+                  {
+                    (item.tekniskeData && item.tekniskeData.subType) ?
+                      (<tr>
+                        <td>Subtype</td><td>{item.tekniskeData.subType}</td>
+                      </tr>)
+                      : null
+                  }
 
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>HAPI id</td><td>{(item.tekniskeData && item.tekniskeData.HapiId) ? item.tekniskeData.HapiId : ''}</td>
-                  </tr>
+                  {
+                    (item.tekniskeData && item.tekniskeData.HapiId) ?
+                      (<tr>
+                        <td>HAPI id</td><td>{item.tekniskeData.HapiId}</td>
+                      </tr>)
+                      : null
+                  }
+
+                  {
+                    Array.isArray(item.tema) ?
+                      <tr>
+                        <td colSpan="2">{this.renderTema(item.tema)}</td>
+                      </tr>
+                      : null
+                  }
+
 
                   {
                     Array.isArray(item.links) ?
@@ -150,25 +167,39 @@ export const HTMLRender = class HTMLRender extends React.Component {
               <h2>Links navigation</h2>
             </CollapsibleHead>
             <CollapsibleContent>
+            
+            
             <ol>
                   {this.renderLinksList(item.links)}
             </ol>
+            
+
+            
             </CollapsibleContent>
 
           </CollapsibleComponent>
 
-         
-  
-      </div>
+    </div>
     );
   }
-  
+
   renderLinksList(links) {
-    if (links != null)
-      return links.map((item, index) =>
-        <li key={index}>
-          <div className="link" onClick={() => this.props.linkCallback(item.href)}>{item.href ? item.href : ''}</div>
-        </li>);
+    if (links != null) {
+      let barn = [];
+      links.forEach(link => {
+        if(link.$title) barn.push(link);
+      });
+
+      if(barn.length > 0) {
+        return barn.map((item, index) => 
+          <li key={index}>
+            <div>
+              <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
+            </div>
+          </li>
+        );
+      }
+    }        
   }
 
   renderJson() {
@@ -192,10 +223,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </div>
           </div>);
       } else {
-        //if object (checking)
         let item = json;
         return (
-          this.renderItem(item)
+          this.renderItem(item, 0)
           );
       }
     }
@@ -225,6 +255,24 @@ export const HTMLRender = class HTMLRender extends React.Component {
             <tr>
               <td>Struktur Id</td><td>{item.strukturId ? item.strukturId : ''}</td>
             </tr>
+
+          </tbody></table>
+
+        </div>);
+  }
+
+  renderTema(tema) {
+    if (tema != null)
+      return tema.map((item, index) =>
+        <div key={index}>
+
+          <table><tbody>
+
+            <tr>
+              <td style={{ fontWeight: "bold" }}>Tema</td><td>{item.tema ? item.tema : ''}</td>
+            </tr>
+
+           
 
           </tbody></table>
 

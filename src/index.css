@@ -55,7 +55,7 @@ h2 {
   margin: 0px;
 }
 
-div.link {
+.link {
   text-decoration: underline;
   color: darkblue;
   cursor: pointer;

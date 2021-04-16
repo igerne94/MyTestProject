@@ -128,6 +128,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       : null
                   }
 
+                  {/*
                   {
                     Array.isArray(item.tema) ?
                       <tr>
@@ -135,6 +136,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       </tr>
                       : null
                   }
+                */}
 
 
                   {
@@ -208,10 +210,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
       if (Array.isArray(json) && window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
           <div key={index}>
-
-            <div>{item.kortTittel}</div>
-            <div>{item.id}</div>
-            <p> this string will never be written</p>
+            <div><b>Tittel: </b><span>{item.kortTittel}</span></div>
+            <div><b>ID: </b><span>{item.id}</span></div>
+            <br></br>
           </div>
         )
       }
@@ -261,15 +262,21 @@ export const HTMLRender = class HTMLRender extends React.Component {
         </div>);
   }
 
-  renderTema(tema) {
-    if (tema != null)
-      return tema.map((item, index) =>
-        <div key={index}>
+  
 
+  /*renderTema(tema) {
+
+   
+    if (tema != null)
+
+      return tema.map((item, index) =>
+     
+        <div key={index}>
+          
           <table><tbody>
 
             <tr>
-              <td style={{ fontWeight: "bold" }}>Tema</td><td>{item.tema ? item.tema : ''}</td>
+              <td style={{ fontWeight: "bold"}}>Tema</td><td>{item.tema ? item.tema : null }</td>
             </tr>
 
            
@@ -277,7 +284,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
           </tbody></table>
 
         </div>);
-  }
+  } */
 
 
 }

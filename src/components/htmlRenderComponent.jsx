@@ -13,8 +13,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
-   
+  
       <div className="infobit">
+    
           <div><h1>{item.tittel}</h1></div>
           <div name={item.kortTittel}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
           <div name={item.id}>{item.intro ? item.intro : ''}</div>
@@ -22,6 +23,22 @@ export const HTMLRender = class HTMLRender extends React.Component {
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
           
           <CollapsibleComponent name={item.id}>
+
+          <CollapsibleHead>
+                <h2>Links navigation</h2>
+              </CollapsibleHead>
+              <CollapsibleContent>
+              
+              
+              <ol>
+                    {this.renderLinksList(item.links)}
+              </ol>
+            
+
+            
+            </CollapsibleContent>
+
+
             {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
             {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
 
@@ -165,19 +182,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
               </tbody></table></CollapsibleContent>
 
 
-            <CollapsibleHead>
-              <h2>Links navigation</h2>
-            </CollapsibleHead>
-            <CollapsibleContent>
             
-            
-            <ol>
-                  {this.renderLinksList(item.links)}
-            </ol>
-            
-
-            
-            </CollapsibleContent>
 
           </CollapsibleComponent>
 
@@ -196,6 +201,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return barn.map((item, index) => 
           <li key={index}>
             <div>
+              {item.rel==='forelder' ? <span>(Forelder)</span> : <span>(Barn)</span>}
+
               <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
             </div>
           </li>

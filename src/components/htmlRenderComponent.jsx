@@ -24,19 +24,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
           
           <CollapsibleComponent name={item.id}>
 
-          <CollapsibleHead>
-                <h2>Links navigation</h2>
-              </CollapsibleHead>
-              <CollapsibleContent>
-              
-              
-              <ol>
-                    {this.renderLinksList(item.links)}
-              </ol>
-            
-
-            
-            </CollapsibleContent>
+          
 
 
             {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
@@ -181,7 +169,19 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   </tr>
               </tbody></table></CollapsibleContent>
 
+              <CollapsibleHead>
+                <h2>Links navigation</h2>
+              </CollapsibleHead>
+              <CollapsibleContent>
+              
+              
+              <ol>
+                    {this.renderLinksList(item.links)}
+              </ol>
+            
 
+            
+            </CollapsibleContent>
             
 
           </CollapsibleComponent>
@@ -201,7 +201,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return barn.map((item, index) => 
           <li key={index}>
             <div>
-              {item.rel==='forelder' ? <span>(Forelder)</span> : <span>(Barn)</span>}
+              {item.rel==='forelder' ? <span><b>Forelder:&nbsp;</b></span> : <span><b>Barn:&nbsp;</b></span>}
 
               <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
             </div>

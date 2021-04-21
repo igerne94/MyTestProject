@@ -3,8 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import { enviroments } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
+import SearchComponent from './searchComponent.jsx';
+
 import { Spinner } from 'reactstrap';
-//import { StructureLinksRender } from "./StructureLinksRender";
 
 
 export const HomePage = class HomePage extends React.Component {
@@ -19,9 +20,9 @@ export const HomePage = class HomePage extends React.Component {
         code: '',
         url: '',
         response: '',
-        records: [],
         enviroment: 'prod',
-        links: ''
+        links: '',
+        concepts: ''
       };
   
     }
@@ -69,11 +70,12 @@ export const HomePage = class HomePage extends React.Component {
   
     responseHandler = (data) => {
       if (data) {
-        // Get links data
+        // Get links data, save it to arr
         let promises = [];
 
         if (Array.isArray(data)) {
           data.forEach(el => {
+            //what happens here in each el
             if(Array.isArray(el.links)) {
               el.links.forEach(link => {
                 if(link.rel === 'barn' || link.rel === 'forelder') {
@@ -188,6 +190,98 @@ export const HomePage = class HomePage extends React.Component {
       }, () => this.setState({ showSpinner: false }));
     }
 
+    codeSystemPromise = (url) => {
+      let promise = fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
+      )
+      .then(response => response.json());
+      return promise;
+    }
+
+    searchCallback = (request) => {
+      this.setState({concepts: '' }); // hide result on input regardless
+      if(!request) return;
+
+      this.setState({query: request});
+
+      setTimeout(() => {
+        if(this.state.query === request) {
+          this.setState({ showSpinner: true});
+
+          const snomedUrl = 'https://snowstorm.rundberg.no/browser/MAIN/SNOMEDCT-NO/descriptions'
+            + '?limit=10'
+            + '&active=true'
+            + '&groupByConcept=true'
+            + '&language=no&language=nb&language=nn&language=en'
+            + '&conceptActive=true'
+            + '&term=' + request;
+
+          fetch(snomedUrl,
+            {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json'
+              }
+            }
+          )
+          .then(response => response.json())
+          .then(data => {
+            if(this.state.query === request) {
+
+              if(Array.isArray(data.items)) {
+                let promises = [];
+
+                data.items.forEach(item => {
+                  // ICPC2
+                  let codeSystemUrl = 'https://snowstorm.rundberg.no/browser/MAIN/ICPC2/members'
+                    + '?limit=10'
+                    + '&active=true'
+                    + '&referenceSet=450993002'
+                    + '&referencedComponentId=' + item?.concept?.conceptId;
+                  
+                  let icd2Promise = this.codeSystemPromise(codeSystemUrl);
+                  promises.push(icd2Promise);
+                  icd2Promise.then(icpc2Data => {
+                    item.$icd2 = icpc2Data?.items[0]?.additionalFields?.mapTarget;
+                  });
+
+                  // ICPC2
+                  codeSystemUrl = 'https://snowstorm.rundberg.no/browser/MAIN/members'
+                    + '?limit=10'
+                    + '&active=true'
+                    + '&referenceSet=447562003'
+                    + '&referencedComponentId=' + item?.concept?.conceptId;
+
+                  let icpc10Promise = this.codeSystemPromise(codeSystemUrl);
+                  promises.push(icpc10Promise);
+                  icpc10Promise.then(icpc10Data => {
+                    item.$icpc10 = icpc10Data?.items[0]?.additionalFields?.mapTarget;
+                  });
+                });
+
+                Promise.all(promises).then(() => {
+                  if(this.state.query === request) {
+                    console.log("Final result: ", data);
+                    this.setState({
+                      concepts: JSON.stringify(data, null, 2),
+                      showSpinner: false
+                    });
+                  }
+                });
+              }
+              
+              console.log(data);
+            }
+          });
+        }
+      }, 1000);
+    }
+
     render() {
       return (
         <div>
@@ -256,6 +350,7 @@ export const HomePage = class HomePage extends React.Component {
                 />
               </div>
   
+
               <div className="form-group">
                 <input
                   type='submit'
@@ -264,6 +359,7 @@ export const HomePage = class HomePage extends React.Component {
                 />
               </div>
   
+              <SearchComponent searchCallback={this.searchCallback} concepts={this.state.concepts}/>
                {this.state.showSpinner ? <Spinner color="success" /> : null}      
               
           </form>
@@ -271,7 +367,6 @@ export const HomePage = class HomePage extends React.Component {
           <div>
             <HTMLRender data={this.state.response} linkCallback={this.linkCallback}/>
           </div>
-          {/*<div><pre> <StructureLinksRender link={this.state.links}/></pre></div>*/}
           <div><pre>{this.state.response}</pre></div>
           <div><pre><h4>{this.state.url}</h4></pre></div>
           

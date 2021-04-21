@@ -213,8 +213,13 @@ export const HomePage = class HomePage extends React.Component {
         if(this.state.query === request) {
           this.setState({ showSpinner: true});
 
-          const snomedUrl = 'https://snowstorm.rundberg.no/browser/MAIN/SNOMEDCT-NO/descriptions'
-            + '?limit=10'
+const terminologyServer = 'https://snowstorm.conteir.no/'
+const branch = 'MAIN/SNOMEDCT-NO'
+          const snomedUrl = terminologyServer
+           + 'browser/'
+           + branch
+           + '/descriptions'
+            + '?limit=1'
             + '&active=true'
             + '&groupByConcept=true'
             + '&language=no&language=nb&language=nn&language=en'
@@ -236,7 +241,10 @@ export const HomePage = class HomePage extends React.Component {
               if(Array.isArray(data.items)) {
                 let promises = [];
 
-               /* data.items.forEach(item => {
+               /* 
+               Comment out because mapping is not relevant for this search
+               
+               data.items.forEach(item => {
                   // ICPC2
                   let codeSystemUrl = 'https://snowstorm.rundberg.no/browser/MAIN/ICPC2/members'
                     + '?limit=10'

@@ -17,10 +17,10 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
             <div>{item.concept.fsn.term}</div>
         </div>
         <div>
-          <div className="code-caption">Snomed CT</div>
+          <div className="code-caption">SCTID</div>
           <div>{item.concept.conceptId}</div>
         </div>
-
+{/*
         {item.$icd2 ? 
           <div>
             <div className="code-caption">ICPC-2</div>
@@ -34,7 +34,7 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
             <div>{item.$icpc10}</div>
           </div>
         : null}
-
+        */}
       </div>
     );
   }
@@ -49,6 +49,7 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
               {this.renderItem(item)}
           </div>);
       }
+      
     }
     return '';
   }
@@ -56,13 +57,13 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
   render() {
       return (
           <div>
-            <div className="form-group">
               <input 
+              id="code"
+              autoComplete="off"
                 type='text'
                 placeholder='Code'
                 onChange={evt => this.onSearchChange(evt)}
                 />
-            </div>
             {this.renderResult()}
           </div>
       )

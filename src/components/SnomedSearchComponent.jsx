@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SearchComponent = class SearchComponent extends React.Component {
+export const SnomedSearchComponent = class SnomedSearchComponent extends React.Component {
 
   onSearchChange = (event) => {
     let request = event.target.value;
@@ -59,7 +59,7 @@ export const SearchComponent = class SearchComponent extends React.Component {
             <div className="form-group">
               <input 
                 type='text'
-                placeholder='Search'
+                placeholder='Code'
                 onChange={evt => this.onSearchChange(evt)}
                 />
             </div>
@@ -70,5 +70,5 @@ export const SearchComponent = class SearchComponent extends React.Component {
 
 }
 
-export default SearchComponent;
+export default SnomedSearchComponent;
 

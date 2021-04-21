@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import { enviroments } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
-import SearchComponent from './searchComponent.jsx';
+import SnomedSearchComponent from './SnomedSearchComponent.jsx';
 
 import { Spinner } from 'reactstrap';
 
@@ -236,7 +236,7 @@ export const HomePage = class HomePage extends React.Component {
               if(Array.isArray(data.items)) {
                 let promises = [];
 
-                data.items.forEach(item => {
+               /* data.items.forEach(item => {
                   // ICPC2
                   let codeSystemUrl = 'https://snowstorm.rundberg.no/browser/MAIN/ICPC2/members'
                     + '?limit=10'
@@ -250,20 +250,20 @@ export const HomePage = class HomePage extends React.Component {
                     item.$icd2 = icpc2Data?.items[0]?.additionalFields?.mapTarget;
                   });
 
-                  // ICPC2
+                  // ICD-10
                   codeSystemUrl = 'https://snowstorm.rundberg.no/browser/MAIN/members'
                     + '?limit=10'
                     + '&active=true'
                     + '&referenceSet=447562003'
                     + '&referencedComponentId=' + item?.concept?.conceptId;
 
-                  let icpc10Promise = this.codeSystemPromise(codeSystemUrl);
+                  let icd10Promise = this.codeSystemPromise(codeSystemUrl);
                   promises.push(icpc10Promise);
-                  icpc10Promise.then(icpc10Data => {
-                    item.$icpc10 = icpc10Data?.items[0]?.additionalFields?.mapTarget;
+                  icd10Promise.then(icpc10Data => {
+                    item.$icpc10 = icd10Data?.items[0]?.additionalFields?.mapTarget;
                   });
                 });
-
+*/
                 Promise.all(promises).then(() => {
                   if(this.state.query === request) {
                     console.log("Final result: ", data);
@@ -283,6 +283,21 @@ export const HomePage = class HomePage extends React.Component {
     }
 
     render() {
+      const codeSystem = this.state.codeSystem;
+      let searchField;
+      if (codeSystem === 'SNOMED-CT') {
+        searchField =  <SnomedSearchComponent searchCallback={this.searchCallback} concepts={this.state.concepts}/>
+       
+      } else {
+        searchField = <input
+        type='text'
+        autoComplete="on"
+        id="code"
+        placeholder="Code"
+        value={this.state.code}
+        onChange={evt => this.ChangeHandlerCode(evt)}
+      />;
+      }
       return (
         <div>
   
@@ -338,19 +353,12 @@ export const HomePage = class HomePage extends React.Component {
                   <option value="SNOMED-CT">SNOMED-CT</option>
                 </select>
               </div>
-  
               <div className="form-group">
-                <input
-                  type='text'
-                  autoComplete="on"
-                  id="code"
-                  placeholder="Code"
-                  value={this.state.code}
-                  onChange={evt => this.ChangeHandlerCode(evt)}
-                />
+              {searchField}
+              {this.state.showSpinner ? <Spinner color="success" /> : null} 
               </div>
-  
-
+             
+              
               <div className="form-group">
                 <input
                   type='submit'
@@ -359,8 +367,7 @@ export const HomePage = class HomePage extends React.Component {
                 />
               </div>
   
-              <SearchComponent searchCallback={this.searchCallback} concepts={this.state.concepts}/>
-               {this.state.showSpinner ? <Spinner color="success" /> : null}      
+                 
               
           </form>
   

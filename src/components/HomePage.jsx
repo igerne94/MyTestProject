@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
-import { enviroments } from '../config.ts';
+import { enviroments, snomedURLs } from '../config.ts';
 import HTMLRender from './htmlRenderComponent.jsx';
 import SnomedSearchComponent from './SnomedSearchComponent.jsx';
 
@@ -213,20 +213,7 @@ export const HomePage = class HomePage extends React.Component {
       if (this.state.query === request) {
         this.setState({ showSpinner: true });
 
-        const terminologyServer = 'https://snowstorm.conteir.no/'
-        const branch = 'MAIN/SNOMEDCT-NO'
-        const snomedUrl = terminologyServer
-          + 'browser/'
-          + branch
-          + '/descriptions'
-          + '?limit=10'
-          + '&active=true'
-          + '&groupByConcept=true'
-          + '&language=no&language=nb&language=nn&language=en'
-          + '&conceptActive=true'
-          + '&term=' + request;
-
-        fetch(snomedUrl,
+        fetch(snomedURLs.getTerms + request,
           {
             method: 'GET',
             headers: {
@@ -282,7 +269,7 @@ export const HomePage = class HomePage extends React.Component {
                   }
                 });
               }
-
+              
               console.log(data);
             }
           });
@@ -374,9 +361,7 @@ export const HomePage = class HomePage extends React.Component {
               disabled={!(this.state.uglyId || this.state.codeSystem || this.state.code)}
             />
           </div>
-
-
-
+          
         </form>
 
         <div>

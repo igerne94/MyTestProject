@@ -48,3 +48,13 @@ export const codeSystems = [
     },
   ]
 
+  //SNOMED CT CONFIGURATIONS
+  let terminlogyServer: string = 'https://snowstorm.conteir.no';
+  let branch: string = 'MAIN/SNOMEDCT-NO';
+  let urlParameters: string = '?limit=10&active=true&groupByConcept=true&language=no&language=nb&language=nn&language=en&conceptActive=true';
+
+  export const snomedURLs =  
+  {
+    getTerms: terminlogyServer + '/browser/' + branch + '/descriptions' + urlParameters + '&term=',
+  }
+  

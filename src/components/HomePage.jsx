@@ -27,8 +27,8 @@ export const HomePage = class HomePage extends React.Component {
 
   }
 
-  mySubmitHandler = (event) => {
-    event.preventDefault();
+  mySubmitHandler = (event, conceptId) => {
+    if(event) event.preventDefault();
 
     this.setState({ response: '' });
 
@@ -39,10 +39,14 @@ export const HomePage = class HomePage extends React.Component {
     let url = setEnviroments.url + 'innhold';
     let key = setEnviroments.key;
 
-    if (this.state.uglyId) {
-      url += '/' + this.state.uglyId;
+    const uglyId = this.state.uglyId;
+    const codeSystem = this.state.codeSystem;
+    const code = conceptId ? conceptId : this.state.code;
+
+    if (uglyId) {
+      url += '/' + uglyId;
     } else {
-      url += '?kodeverk=' + this.state.codeSystem + "&kode=" + this.state.code;
+      url += '?kodeverk=' + codeSystem + "&kode=" + code;
     }
     /*else {
       alert("Neither HAPI-id nor Code defined!")
@@ -66,6 +70,10 @@ export const HomePage = class HomePage extends React.Component {
       .then(data => {
         this.responseHandler(data);
       }, () => this.setState({ showSpinner: false }));
+  }
+
+  loadConcept = (conceptId) => {
+    this.mySubmitHandler(null, conceptId);
   }
 
   responseHandler = (data) => {
@@ -281,8 +289,7 @@ export const HomePage = class HomePage extends React.Component {
     const codeSystem = this.state.codeSystem;
     let searchField;
     if (codeSystem === 'SNOMED-CT') {
-      searchField = <SnomedSearchComponent searchCallback={this.searchCallback} concepts={this.state.concepts} />
-
+      searchField = <SnomedSearchComponent searchCallback={this.searchCallback} loadConcept={this.loadConcept} concepts={this.state.concepts} />
     } else {
       searchField = <input
         type='text'

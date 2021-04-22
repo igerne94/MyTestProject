@@ -1,17 +1,34 @@
 import React from 'react';
 
 export const SnomedSearchComponent = class SnomedSearchComponent extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      request: ''
+    };
+
+  }
 
   onSearchChange = (event) => {
     let request = event.target.value;
+
+    this.setState({request: request});
+
     if(request.length > 2) {
       this.props.searchCallback(request);
     }
   }
 
+  onItemClick = (conceptId) => {
+    this.setState({request: conceptId});
+    this.props.loadConcept(conceptId);
+  }
+
+  //render each block
   renderItem(item) {
     return (
-      <div className="item-block">
+      <div className="item-block" onClick={() => this.onItemClick(item.concept.conceptId)}>
         <div>
             <div className="main-term">{item.concept.pt.term}</div>
             <div>{item.concept.fsn.term}</div>
@@ -61,7 +78,8 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
               id="code"
               autoComplete="off"
                 type='text'
-                placeholder='Code'
+                placeholder='Search'
+                value={this.state.request}
                 onChange={evt => this.onSearchChange(evt)}
                 />
             {this.renderResult()}

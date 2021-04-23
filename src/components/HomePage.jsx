@@ -39,6 +39,7 @@ export const HomePage = class HomePage extends React.Component {
     let url = setEnviroments.url + 'innhold';
     let key = setEnviroments.key;
 
+    // setState is asynchronous, subsequent calls in the same update cycle overwrite previous (makes lost)
     const uglyId = this.state.uglyId;
     const codeSystem = this.state.codeSystem;
     const code = conceptId ? conceptId : this.state.code;
@@ -72,6 +73,7 @@ export const HomePage = class HomePage extends React.Component {
       }, () => this.setState({ showSpinner: false }));
   }
 
+  // 
   loadConcept = (conceptId) => {
     this.mySubmitHandler(null, conceptId);
   }
@@ -86,6 +88,7 @@ export const HomePage = class HomePage extends React.Component {
           //what happens here in each el
           if (Array.isArray(el.links)) {
             el.links.forEach(link => {
+              //retrieving
               if (link.rel === 'barn' || link.rel === 'forelder') {
                 promises.push(this.getLinkData(link));
               }
@@ -293,7 +296,7 @@ export const HomePage = class HomePage extends React.Component {
     } else {
       searchField = <input
         type='text'
-        autoComplete="on"
+        autoComplete="off"
         id="code"
         placeholder="Code"
         value={this.state.code}
@@ -333,7 +336,7 @@ export const HomePage = class HomePage extends React.Component {
             <input
               id="id"
               type='text'
-              autoComplete="on"
+              autoComplete="off"
               placeholder="HAPI-id"
               value={this.state.uglyId}
               onChange={evt => this.myChangeHandler(evt)}

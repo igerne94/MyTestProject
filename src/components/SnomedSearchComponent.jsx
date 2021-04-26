@@ -10,6 +10,7 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
 
   }
 
+  // input to the search field
   onSearchChange = (event) => {
     let request = event.target.value;
 
@@ -20,12 +21,13 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
     }
   }
 
+  // conceptId - corresponds to the entered term
   onItemClick = (conceptId) => {
     this.setState({request: conceptId});
-    this.props.loadConcept(conceptId);
+    this.props.loadConceptCall(conceptId);
   }
 
-  //render each block
+  //render each block after term was written
   renderItem(item) {
     return (
       <div className="item-block" onClick={() => this.onItemClick(item.concept.conceptId)}>
@@ -37,7 +39,7 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
           <div className="code-caption">SCTID</div>
           <div>{item.concept.conceptId}</div>
         </div>
-{/*
+        {/*
         {item.$icd2 ? 
           <div>
             <div className="code-caption">ICPC-2</div>
@@ -90,4 +92,3 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
 }
 
 export default SnomedSearchComponent;
-

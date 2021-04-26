@@ -16,7 +16,8 @@ export const App = class App extends React.Component {
 
         <Router>
           <div>
-            
+            {/* Set defaultActiveKey to the current 'rest' path in order to
+              switch the Nav tab to the current selected page */}
             <Nav variant="tabs" defaultActiveKey={window.location.pathname}>
               <Nav.Item>
                 <Nav.Link href="/">Home</Nav.Link>

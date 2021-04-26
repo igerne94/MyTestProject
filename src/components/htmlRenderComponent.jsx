@@ -17,22 +17,20 @@ export const HTMLRender = class HTMLRender extends React.Component {
       <div className="infobit">
     
           <div><h1>{item.tittel}</h1></div>
-          <div name={item.kortTittel}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
+          {/* zacheeeem name=? */}
+          <div name={item.id}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
           <div name={item.id}>{item.intro ? item.intro : ''}</div>
           <div name={item.id}>{item.forstPublisert ? item.forstPublisert.substring(0,11) : ''}</div>
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
           
           <CollapsibleComponent name={item.id}>
 
-          
-
-
             {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
             {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
 
-            {<CollapsibleHead><h2>Metadata</h2></CollapsibleHead>}
-
-            <CollapsibleContent><table><tbody>
+            <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
+            <CollapsibleContent>
+              <table><tbody>
                   <tr>
                     <td style={{fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : null}</td>
                   </tr>
@@ -61,7 +59,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       : null
                   }
 
-                
                   {
                     item?.koder?.['ICPC-2'] ?
                       (<tr>
@@ -143,8 +140,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   }
                 */}
 
-
-                  {
+                  
+                  { 
+                    //rendering links for metadata
                     Array.isArray(item.links) ?
                       <tr>
                         <td colSpan="2">{this.renderLinks(item.links)}</td>
@@ -167,33 +165,28 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
                   </tr>
-              </tbody></table></CollapsibleContent>
+              </tbody></table>
+            </CollapsibleContent>
 
-              <CollapsibleHead>
-                <h2>Links navigation</h2>
-              </CollapsibleHead>
-              <CollapsibleContent>
-              
-              
+            <CollapsibleHead><h2>Links navigation</h2></CollapsibleHead>
+            <CollapsibleContent>
               <ol>
-                    {this.renderLinksList(item.links)}
+                  {/* rendering links list for navigation block */}
+                  {this.renderLinksList(item.links)} 
               </ol>
-            
-
-            
             </CollapsibleContent>
             
-
           </CollapsibleComponent>
-
-    </div>
+      </div>
     );
   }
 
   renderLinksList(links) {
     if (links != null) {
+      //array of children links:
       let barn = [];
       links.forEach(link => {
+        //creating a field manually (name of the link):
         if(link.$title) barn.push(link);
       });
 
@@ -202,7 +195,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
           <li key={index}>
             <div>
               {item.rel==='forelder' ? <span><b>Forelder:&nbsp;</b></span> : <span><b>Barn:&nbsp;</b></span>}
-
+              {/*onClick making linkCallback: call the function from HomePage : */}
               <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
             </div>
           </li>
@@ -213,16 +206,21 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderJson() {
     if (this.props.data) {
+      // if the response from HomePage "data={this.state.response}" was recived:
       let json = JSON.parse(this.props.data);
+
+      // check if getId name was added to the home name
       if (Array.isArray(json) && window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
+        //...and render of the getIt page happens here
           <div key={index}>
-            <div><b>Tittel: </b><span>{item.kortTittel}</span></div>
-            <div><b>ID: </b><span>{item.id}</span></div>
+            <div><b>Tittel:</b><span>{item.kortTittel}</span></div>
+            <div><b>ID:</b><span>{item.id}</span></div>
             <br></br>
           </div>
         )
       }
+      // if the home page address remains the same, HomePage render occurs
       else if (Array.isArray(json) && !window.location.href.indexOf('getid') > -1) {
         return json.map((item, index) =>
           <div key={index}>
@@ -231,12 +229,14 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </div>
           </div>);
       } else {
+        //
         let item = json;
         return (
           this.renderItem(item, 0)
           );
       }
     }
+    // if no responce:
     return '';
   }
 
@@ -257,6 +257,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </tr>
 
             <tr>
+              {/*onClick making linkCallback: call the function from HomePage : */}
               <td>Href</td><td><div className="link" onClick={() => this.props.linkCallback(item.href)}>{item.href ? item.href : ''}</div></td>
             </tr>
 
@@ -269,11 +270,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
         </div>);
   }
 
-  
-
   /*renderTema(tema) {
 
-   
     if (tema != null)
 
       return tema.map((item, index) =>
@@ -286,14 +284,10 @@ export const HTMLRender = class HTMLRender extends React.Component {
               <td style={{ fontWeight: "bold"}}>Tema</td><td>{item.tema ? item.tema : null }</td>
             </tr>
 
-           
-
           </tbody></table>
 
         </div>);
   } */
-
-
 }
 
 export default HTMLRender;

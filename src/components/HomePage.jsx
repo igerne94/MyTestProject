@@ -128,7 +128,7 @@ export const HomePage = class HomePage extends React.Component {
     let promise = this.linkPromise(link.href);
     //when promise completed, set title:
     promise.then(data => {
-      link.$title = data.kortTittel;
+      link.$title = data.tittel;
     });
     return promise;
   }

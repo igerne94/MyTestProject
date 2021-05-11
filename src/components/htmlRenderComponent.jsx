@@ -194,7 +194,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return barn.map((item, index) => 
           <li key={index}>
             <div>
-              {item.rel==='forelder' ? <span><b>Forelder:&nbsp;</b></span> : <span><b>Barn:&nbsp;</b></span>}
+              {item.rel==='barn' ? <span><b>Barn:&nbsp;</b></span> : <span><b>Forelder:&nbsp;</b></span>}
               {/*onClick making linkCallback: call the function from HomePage : */}
               <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
             </div>
@@ -214,7 +214,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return json.map((item, index) =>
         //...and render of the getIt page happens here
           <div key={index}>
-            <div><b>Tittel:</b><span>{item.kortTittel}</span></div>
+            <div><b>Tittel:</b><span>{item.tittel}</span></div>
             <div><b>ID:</b><span>{item.id}</span></div>
             <br></br>
           </div>

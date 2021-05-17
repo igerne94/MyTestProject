@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { GetIDPage } from './components/GetIDPage.jsx';
 import { HomePage } from './components/HomePage.jsx';
 import { Documentation } from './components/Documentation.jsx';
+import { Record } from './components/Record.jsx';
 import Nav from 'react-bootstrap/Nav'
 
 
@@ -28,6 +29,9 @@ export const App = class App extends React.Component {
               <Nav.Item>
                 <Nav.Link href="/documentation">Documentation</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="/record">Record</Nav.Link>
+              </Nav.Item>
             </Nav>
 
             <Switch>
@@ -39,6 +43,9 @@ export const App = class App extends React.Component {
               </Route>
               <Route path="/documentation" component={Documentation}>
                 <Documentation />
+              </Route>
+              <Route path="/record" component={Record}>
+                <Record />
               </Route>
             </Switch>
 

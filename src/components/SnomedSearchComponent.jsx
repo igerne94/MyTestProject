@@ -77,8 +77,8 @@ export const SnomedSearchComponent = class SnomedSearchComponent extends React.C
       return (
           <div>
               <input 
-              id="code"
-              autoComplete="off"
+                id="code"
+                autoComplete="off"
                 type='text'
                 placeholder='Search'
                 value={this.state.request}

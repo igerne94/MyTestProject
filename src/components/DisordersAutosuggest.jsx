@@ -1,6 +1,7 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import { snomedURLs } from '../config.ts';
+import './DisordersAutosuggest.css';
 
 export default class DisordersAutosuggest extends React.Component {
   constructor() {

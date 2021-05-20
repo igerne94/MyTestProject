@@ -74,41 +74,49 @@ export const Record = class Record extends React.Component {
         Promise.all(promises).then(() => {
             let contentPromises = [];
             // Fetch by ICPC2 if available
+
+            // API key depends on environment: current -> Production
+            const apiKey = '89b72a3ad5cf4723b3f489c3eb4d82a1';
+            const hdBaseUrl = 'https://api.helsedirektoratet.no/innhold/innhold';
+            let params = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Ocp-Apim-Subscription-Key': apiKey
+                }
+            }
+
             if(content.icpc2) {
-                let promiseICPC2Content = fetch().then().then();
+                let url = hdBaseUrl + '?kodeverk=ICPC-2&kode=' + content.icpc2.code;
+                let promiseICPC2Content = fetch(url, params)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(Array.isArray(data) && data.length > 0 && data[0].tekst) {
+                            content.icpc2.text = data[0].tekst;
+                        }
+                    });
                 contentPromises.push(promiseICPC2Content);
             }
 
+            // Fetch by ICD10 if available
             if(content.icd10) {
-                let promiseICD10Content = fetch().then().then();
+                let url = hdBaseUrl + '?kodeverk=ICD-10&kode=' + content.icd10.code;
+                console.log(url);
+                let promiseICD10Content = fetch(url, params)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(Array.isArray(data) && data.length > 0 && data[0].tekst) {
+                            content.icd10.text = data[0].tekst;
+                        }
+                    });
                 contentPromises.push(promiseICD10Content);
             }
 
             Promise.all(contentPromises).then(() => {
+                console.log(content);
                 //render here
             });
         });
-
-        let codeSystemUrl3 = 'https://api.helsedirektoratet.no/innhold/'
-        + 'innhold'
-        + '?kodeverk='
-        + 'ICPC-2'
-        + '&kode='
-        + 'p76';
-
-        fetch(codeSystemUrl3,
-            {
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/json',
-                  'Ocp-Apim-Subscription-Key': '89b72a3ad5cf4723b3f489c3eb4d82a1'
-                }
-              })
-            .then(response => response.json())
-            .then(data => {
-                console.log("this is just data", data);
-            });
-
     }
       
 

@@ -240,35 +240,34 @@ export const Record = class Record extends React.Component {
                         <DisordersAutosuggest suggestCallback={this.fetchContent}/>  
                     </div>
 
-                    <div>{this.myComp}</div>
+                    {/* rendering the thml-response */}
+                       <div>
+                            <h2>ICPC2</h2>
+                                {
+                                    this.state.icpc2Content.length > 0 ? 
+                                    <IFrame>
+                                    <div dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}></div>
+                                    </IFrame>
+                                    :
+                                    <div>None</div>
+                                }
+                        </div>
 
-                    <IFrame>
-                    {/* making response html */}
-                        
-                        <h2>ICPC2</h2>
-                        {
-                            this.state.icpc2Content.length > 0 ? 
-                            <div dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}></div>
-                            :
-                            <div>None</div>
-                        }
-                        <h2>ICD10</h2>
-                        {
-                            this.state.icd10Content.length > 0 ? 
-                            <div dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}></div>
-                            :
-                            <div>None</div>
-                        }
-        
-
-                    </IFrame>
+                        <div>
+                            <h2>ICD10</h2>
+                            {
+                                this.state.icd10Content.length > 0 ? 
+                                <IFrame>
+                                <div dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}></div>
+                                </IFrame>
+                                :
+                                <div>None</div>
+                            }
+                        </div>
     
-                   
             </div>
-
         )
     }
-
 }
 
 export default Record;

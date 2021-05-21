@@ -2,6 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import DisordersAutosuggest from '../components/DisordersAutosuggest';
+import { IFrame } from './IFrameCompoment.jsx';
+
 
 export const Record = class Record extends React.Component {
 
@@ -132,7 +134,9 @@ export const Record = class Record extends React.Component {
             });
         });
     }
-      
+        
+
+    
 
     render() {
         return (
@@ -236,22 +240,30 @@ export const Record = class Record extends React.Component {
                         <DisordersAutosuggest suggestCallback={this.fetchContent}/>  
                     </div>
 
-                    {/* making response html */}
-                    <h2>ICPC2</h2>
-                    {
-                        this.state.icpc2Content.length > 0 ? 
-                        <div dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}></div>
-                        :
-                        <div>None</div>
-                    }
-                    <h2>ICD10</h2>
-                    {
-                        this.state.icd10Content.length > 0 ? 
-                        <div dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}></div>
-                        :
-                        <div>None</div>
-                    }
+                    <div>{this.myComp}</div>
 
+                    <IFrame>
+                    {/* making response html */}
+                        
+                        <h2>ICPC2</h2>
+                        {
+                            this.state.icpc2Content.length > 0 ? 
+                            <div dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}></div>
+                            :
+                            <div>None</div>
+                        }
+                        <h2>ICD10</h2>
+                        {
+                            this.state.icd10Content.length > 0 ? 
+                            <div dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}></div>
+                            :
+                            <div>None</div>
+                        }
+        
+
+                    </IFrame>
+    
+                   
             </div>
 
         )

@@ -40,6 +40,7 @@ export const App = class App extends React.Component {
                 <Documentation />
               </Route>
               <Route path="/record" component={Record}>
+              {/*<iframe src="https://igerne94.github.io/gallery/" />*/}
                 <Record />
               </Route>
             </Switch>

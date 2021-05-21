@@ -1,7 +1,7 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import { snomedURLs } from '../config.ts';
-import './DisordersAutosuggest.css';
+import './DisordersAutoSuggest.css';
 
 export default class DisordersAutosuggest extends React.Component {
   constructor() {
@@ -22,7 +22,7 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-        //this.props.suggestCallback(suggestion.concept.conceptId);
+        this.props.suggestCallback(suggestion.concept.conceptId);
         return suggestion.term + ' (' + suggestion.concept.conceptId + ')';
     }
   

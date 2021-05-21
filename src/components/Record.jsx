@@ -9,7 +9,9 @@ export const Record = class Record extends React.Component {
         super(props);
     
         this.state = {
-            response: ''
+            response: '',
+            icpc2Content: '',
+            icd10Content: ''
         };
       }
 
@@ -24,8 +26,9 @@ export const Record = class Record extends React.Component {
         ).then(response => response.json());
         return promise;
       }
-     
-    handleClick = () => {
+    
+    // Getting a content from autosuggest
+    fetchContent = (conceptId) => {
         let promises = [];
         let content = {};
 
@@ -34,12 +37,12 @@ export const Record = class Record extends React.Component {
         + '?limit=10'
         + '&active=true'
         + '&referenceSet=450993002'
-        + '&referencedComponentId=' + 35489007;
+        + '&referencedComponentId=' + conceptId;
 
         let promiseICPC2 = fetch(codeSystemUrl1)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                console.log('ICPC2', data);
                 if(data && Array.isArray(data.items) && data.items.length > 0) {
                     if(data.items[0]?.additionalFields?.mapTarget) {
                         content.icpc2 = {
@@ -55,7 +58,7 @@ export const Record = class Record extends React.Component {
         + '?limit=10'
         + '&active=true'
         + '&referenceSet=447562003'
-        + '&referencedComponentId=' + 35489007;
+        + '&referencedComponentId=' + conceptId;
 
         let promiseICD10 = fetch(codeSystemUrl)
             .then(response => response.json())
@@ -91,6 +94,7 @@ export const Record = class Record extends React.Component {
                 let promiseICPC2Content = fetch(url, params)
                     .then(response => response.json())
                     .then(data => {
+                        console.log('icpc2 items:', data);
                         if(Array.isArray(data) && data.length > 0 && data[0].tekst) {
                             content.icpc2.text = data[0].tekst;
                         }
@@ -105,6 +109,7 @@ export const Record = class Record extends React.Component {
                 let promiseICD10Content = fetch(url, params)
                     .then(response => response.json())
                     .then(data => {
+                        console.log('icd10 items:', data);
                         if(Array.isArray(data) && data.length > 0 && data[0].tekst) {
                             content.icd10.text = data[0].tekst;
                         }
@@ -113,8 +118,17 @@ export const Record = class Record extends React.Component {
             }
 
             Promise.all(contentPromises).then(() => {
-                console.log(content);
-                //render here
+                console.log('Content', content);
+
+                //making render for icpc
+                if(content?.icpc2?.text) {
+                    this.setState({icpc2Content: content.icpc2.text});
+                }
+
+                //making render for icd
+                if(content?.icd10?.text) {
+                    this.setState({icd10Content: content.icd10.text});
+                }
             });
         });
     }
@@ -203,11 +217,13 @@ export const Record = class Record extends React.Component {
                         />
                     </div> 
                     
+                    {/*
                     <div>
-                        <button onClick={this.handleClick}>
+                        <button onClick={this.fetchContent}>
                             Click me
                         </button>
                     </div>
+                    */}
 
                     {/* the sixth, functional*/}
                     <div className="row">
@@ -217,10 +233,24 @@ export const Record = class Record extends React.Component {
                     </div>
 
                     <div className="form-group">
-                        <DisordersAutosuggest/>  
+                        <DisordersAutosuggest suggestCallback={this.fetchContent}/>  
                     </div>
 
-                   
+                    {/* making response html */}
+                    <h2>ICPC2</h2>
+                    {
+                        this.state.icpc2Content.length > 0 ? 
+                        <div dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}></div>
+                        :
+                        <div>None</div>
+                    }
+                    <h2>ICD10</h2>
+                    {
+                        this.state.icd10Content.length > 0 ? 
+                        <div dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}></div>
+                        :
+                        <div>None</div>
+                    }
 
             </div>
 

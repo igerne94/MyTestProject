@@ -4,9 +4,7 @@ import '../index.css';
 import DisordersAutosuggest from '../components/DisordersAutosuggest';
 import { IFrame } from './IFrameCompoment.jsx';
 
-
 export const Record = class Record extends React.Component {
-
     constructor(props) {
         super(props);
     
@@ -27,7 +25,7 @@ export const Record = class Record extends React.Component {
           }
         ).then(response => response.json());
         return promise;
-      }
+      };
     
     // Getting a content from autosuggest
     fetchContent = (conceptId) => {
@@ -35,7 +33,7 @@ export const Record = class Record extends React.Component {
         let content = {};
 
           // ICPC2
-        let codeSystemUrl1 = 'https://snowstorm.rundberg.no/browser/MAIN/ICPC2/members'
+        let codeSystemUrl1 = 'https://snowstorm.conteir.no/browser/MAIN/ICPC-2/members'
         + '?limit=10'
         + '&active=true'
         + '&referenceSet=450993002'
@@ -44,7 +42,7 @@ export const Record = class Record extends React.Component {
         let promiseICPC2 = fetch(codeSystemUrl1)
             .then(response => response.json())
             .then(data => {
-                console.log('ICPC2', data);
+                console.log('ICPC-2', data);
                 if(data && Array.isArray(data.items) && data.items.length > 0) {
                     if(data.items[0]?.additionalFields?.mapTarget) {
                         content.icpc2 = {
@@ -65,7 +63,7 @@ export const Record = class Record extends React.Component {
         let promiseICD10 = fetch(codeSystemUrl)
             .then(response => response.json())
             .then(data => {
-                console.log('icd10',data);
+                console.log('icd-10',data);
                 if(data && Array.isArray(data.items) && data.items.length > 0) {
                     if(data.items[0]?.additionalFields?.mapTarget) {
                         content.icd10 = {
@@ -125,6 +123,7 @@ export const Record = class Record extends React.Component {
                 //making render for icpc
                 if(content?.icpc2?.text) {
                     this.setState({icpc2Content: content.icpc2.text});
+                    <span class="badge badge-pill badge-warning">Warning</span>
                 }
 
                 //making render for icd
